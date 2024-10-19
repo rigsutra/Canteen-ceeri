@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     FormControl,
@@ -10,20 +10,32 @@ import {
     useToast,
     Flex,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
-const Signup = () => {
+const Signup = ({ setIsLogin }) => {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const toast = useToast();
+    const navigate = useNavigate();
 
     const handleSignup = (e) => {
         e.preventDefault();
-        // Handle signup logic here
+
+        // Store user data or make API call for signup
+        localStorage.setItem("user", JSON.stringify({ name, email }));
+        setIsLogin(true);
+
         toast({
             title: "Signup Successful.",
             description: "You have signed up successfully.",
             status: "success",
-            duration: 5000,
+            duration: 3000,
             isClosable: true,
         });
+
+        // Redirect to the homepage after signup
+        navigate('/');
     };
 
     return (
@@ -47,19 +59,30 @@ const Signup = () => {
                     <Stack spacing={4}>
                         <FormControl isRequired>
                             <FormLabel>Name</FormLabel>
-                            <Input type="text" placeholder="Enter your name" />
+                            <Input 
+                                type="text" 
+                                placeholder="Enter your name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
                         </FormControl>
                         <FormControl isRequired>
                             <FormLabel>Email</FormLabel>
-                            <Input type="email" placeholder="Enter your email" />
+                            <Input 
+                                type="email" 
+                                placeholder="Enter your email" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </FormControl>
                         <FormControl isRequired>
                             <FormLabel>Password</FormLabel>
-                            <Input type="password" placeholder="Enter your password" />
-                        </FormControl>
-                        <FormControl isRequired>
-                            <FormLabel>Confirm Password</FormLabel>
-                            <Input type="password" placeholder="Confirm your password" />
+                            <Input 
+                                type="password" 
+                                placeholder="Enter your password" 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </FormControl>
                         <Button type="submit" colorScheme="green" width="full">
                             Sign Up
